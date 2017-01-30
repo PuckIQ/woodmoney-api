@@ -2,9 +2,9 @@
   "name": "woodmoney-api",
   "version": "0.1.0",
   "description": "API for NHL Stats (woodmoney)",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,7 @@
   },
   "dependencies": {
     "express": "*",
-    "mongodb": "~2.2.19",
-    "mongoose": "*",
+    "mongodb": "*",
     "body-parser": "*"
   }
 }
