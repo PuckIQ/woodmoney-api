@@ -6,6 +6,10 @@ var dbUri = 'mongodb://' + config.dbUser + ':' + config.dbPass + '@' + config.db
 function WoodMoneyHandler(request) {
   "use strict";
 
+  this.getTest = function(req, res) {
+    res.send("Hello World!")
+  }
+
   this.getPlayerList = function(req, res) {
     var season = req.params.season;
     switch(req.params.gametype) {
