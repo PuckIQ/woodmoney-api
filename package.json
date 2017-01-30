@@ -26,9 +26,9 @@
     "url": "https://github.com/PuckIQ/woodmoney-api/issues"
   },
   "dependencies": {
-    "express": "^4.13.3",
-    "mongodb": "*",
-    "body-parser": "^1.13.3",
-    "request": "*"
+    "express": "^4.14.1",
+    "mongodb": "^2.2.22",
+    "request": "^2.79.0",
+    "http": "*"
   }
 }
