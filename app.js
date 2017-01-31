@@ -9,8 +9,8 @@ var request = require('request'),
 
 routes(app, request);
 
-server.listen(config.httpPort, config.httpIP, function() {
+server.listen(config.httpPort, function() {
   server.close(function() {
-    server.listen(config.httpPort, config.httpIP);
+    server.listen(config.httpPort);
   });
 });
