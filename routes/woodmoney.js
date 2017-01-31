@@ -25,7 +25,8 @@ function WoodMoneyHandler(request) {
         break;
     }
     playerList(season, gametype, function(data) {
-      res.send(data);
+      res.contentType('application/json');
+      res.send(JSON.stringify(data));
     });
   } /* End of Public Function getPlayerList */
 
