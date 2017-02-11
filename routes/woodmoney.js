@@ -6,10 +6,6 @@ var dbUri = 'mongodb://' + config.dbUser + ':' + config.dbPass + '@' + config.db
 function WoodMoneyHandler(request) {
   "use strict";
 
-  this.getTest = function(req, res) {
-    res.send("Hello World!")
-  }
-
   this.getPlayerList = function(req, res) {
     var season = req.params.season;
     switch(req.params.gametype) {
@@ -18,10 +14,10 @@ function WoodMoneyHandler(request) {
       case 2:
       case 'R':
       case 'REG':
-        var gametype = '02';
+        var gametype = 2;
         break;
       default:
-        var gametype = '03';
+        var gametype = 3;
         break;
     }
     playerList(season, gametype, function(data) {
@@ -30,12 +26,14 @@ function WoodMoneyHandler(request) {
     });
   } /* End of Public Function getPlayerList */
 
+
+  /* Start Protected Functions */
   var playerList = function(season, gametype, callback) {
     MongoClient.connect(dbUri, function(err, db) {
       var Collection = db.collection('woodmoneylive');
 
       var results = Collection.aggregate([
-        { '$match': { 'Player': { '$exists': true } } },
+        { '$match': { 'Player': { '$exists': true }, 'season': season, 'gametype': gametype } },
         { '$project': { 'PlayerId': 1, 'Player': 1, '_id': 0 } },
         { '$sort': { 'PlayerId': 1 } },
         { '$group': { '_id': '$PlayerId', 'PlayerName': { '$first': '$Player' } } }
