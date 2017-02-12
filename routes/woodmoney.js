@@ -76,6 +76,7 @@ function WoodMoneyHandler(request) {
       if(query == null) {
         var results = Collection.find();
       } else {
+        console.log(query);
         var results = Collection.find(query);
       }
 
