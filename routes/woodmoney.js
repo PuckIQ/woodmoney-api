@@ -26,6 +26,13 @@ function WoodMoneyHandler(request) {
     });
   } /* End of Public Function getPlayerList */
 
+  this.getQueryBuilder = function(req, res) {
+    var options = req.params;
+    woodMoneyBase(options, function(data) {
+      res.send(data)
+    })
+  }
+
 
   /* Start Protected Functions */
   var playerList = function(season, gametype, callback) {
@@ -52,16 +59,26 @@ function WoodMoneyHandler(request) {
     });
   } /* End of Private Function playerList */
 
-  var woodMoneyByPlayer = function(playerId, options, callback) {
+  var woodMoneyBase = function(options, callback) {
+    /*MongoClient.connect(dbUri, function(err, db) {
+      var Collection = db.collection('woodmoneylive');
 
+      var query = mongoQueryBuilder(options);
+    });*/
+    var query = mongoQueryBuilder(options);
+    callback(query);
   }
 
-  var woodMoneyByTeam = function(teamName, options, callback) {
+  var mongoQueryBuilder = function(options, callback) {
+    var queryBuilder = "";
+    Object.keys(options).forEach(function(key) {
+      if(Number.isInteger)
+        queryBuilder += key + ": " + options[key];
+      else
+        queryBuilder += key + ": '" + options[key] + "'";
+    });
 
-  }
-
-  var woodMoneyAll = function(options, callback) {
-    
+    callback(queryBuilder);
   }
 };
 
