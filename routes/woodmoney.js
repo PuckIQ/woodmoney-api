@@ -51,6 +51,18 @@ function WoodMoneyHandler(request) {
 
     });
   } /* End of Private Function playerList */
+
+  var woodMoneyByPlayer = function(playerId, options, callback) {
+
+  }
+
+  var woodMoneyByTeam = function(teamName, options, callback) {
+
+  }
+
+  var woodMoneyAll = function(options, callback) {
+    
+  }
 };
 
 module.exports = WoodMoneyHandler;
