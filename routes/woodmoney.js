@@ -73,7 +73,11 @@ function WoodMoneyHandler(request) {
       var Collection = db.collection('woodmoneylive');
 
       var query = (Object.keys(options).length > 0) ? mongoQueryBuilder(options) : null;
-      var results = (Object.keys(options).length > 0) ? Collection.find(query) : Collection.find();
+      if(query == null) {
+        var results = Collection.find();
+      } else {
+        var results = Collection.find(query);
+      }
 
       results.toArray(function(err, docs) {
         if(!err)
