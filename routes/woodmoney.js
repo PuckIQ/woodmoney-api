@@ -71,7 +71,7 @@ function WoodMoneyHandler(request) {
     var queryBuilder = "";
     var counter = 0;
     Object.keys(options).forEach(function(key) {
-      var start = (counter > 0) : ", " ? null;
+      var start = (counter > 0) ? ", " : null;
       if(Number.isInteger(options[key]))
         queryBuilder += counter + key + ": " + options[key];
       else
