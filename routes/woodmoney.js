@@ -28,9 +28,9 @@ function WoodMoneyHandler(request) {
 
   this.getQueryBuilder = function(req, res) {
     var options = req.params;
-    woodMoneyBase(options, function(data) {
+    mongoQueryBuilder(options, function(data) {
       res.send(data)
-    })
+    });
   }
 
 
@@ -65,8 +65,6 @@ function WoodMoneyHandler(request) {
 
       var query = mongoQueryBuilder(options);
     });*/
-    var query = mongoQueryBuilder(options);
-    callback(query);
   }
 
   var mongoQueryBuilder = function(options, callback) {
