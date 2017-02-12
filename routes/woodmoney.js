@@ -26,8 +26,17 @@ function WoodMoneyHandler(request) {
     });
   } /* End of Public Function getPlayerList */
 
+  this.getWoodMoneyBase = function(req, res) {
+    var options = req.params;
+    woodMoneyBase(options, function(data) {
+      res.contentType('application/json');
+      res.send(JSON.stringify(data));
+    });
+  }
+
   this.getQueryBuilder = function(req, res) {
     var options = req.params;
+    console.log(Object.keys(options).length);
     mongoQueryBuilder(options, function(data) {
       res.send(data)
     });
@@ -60,11 +69,20 @@ function WoodMoneyHandler(request) {
   } /* End of Private Function playerList */
 
   var woodMoneyBase = function(options, callback) {
-    /*MongoClient.connect(dbUri, function(err, db) {
+    MongoClient.connect(dbUri, function(err, db) {
       var Collection = db.collection('woodmoneylive');
 
       var query = mongoQueryBuilder(options);
-    });*/
+      var results = Collection.find(query);
+
+      results.toArray(function(err, docs) {
+        if(!err)
+          callback(docs);
+        else
+          callback(null);
+        db.close();
+      })
+    });
   }
 
   var mongoQueryBuilder = function(options, callback) {
