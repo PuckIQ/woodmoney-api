@@ -69,11 +69,14 @@ function WoodMoneyHandler(request) {
 
   var mongoQueryBuilder = function(options, callback) {
     var queryBuilder = "";
+    var counter = 0;
     Object.keys(options).forEach(function(key) {
+      var start = (counter > 0) : ", " ? null;
       if(Number.isInteger(options[key]))
-        queryBuilder += key + ": " + options[key];
+        queryBuilder += counter + key + ": " + options[key];
       else
-        queryBuilder += key + ": '" + options[key] + "'";
+        queryBuilder += counter + key + ": '" + options[key] + "'";
+      counter++;
     });
 
     callback(queryBuilder);
