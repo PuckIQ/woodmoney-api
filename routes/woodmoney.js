@@ -73,7 +73,7 @@ function WoodMoneyHandler(request) {
     Object.keys(options).forEach(function(key) {
       var start = (counter > 0) ? ", " : "{";
 
-      if(Number.isInteger(options[key]))
+      if(isNumeric(options[key]))
         queryBuilder += start + key + ": " + options[key];
       else
         queryBuilder += start + key + ": '" + options[key] + "'";
@@ -82,6 +82,10 @@ function WoodMoneyHandler(request) {
     });
 
     callback(queryBuilder + "}");
+  }
+
+  function isNumeric(n) {
+    return !isNaN(n) && isFinite(n);
   }
 };
 
