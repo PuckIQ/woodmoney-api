@@ -34,13 +34,13 @@ function WoodMoneyHandler(request) {
     });
   }
 
+  /* DELETE THIS FOR PRODUCTION
   this.getQueryBuilder = function(req, res) {
     var options = req.params;
-    console.log(Object.keys(options).length);
     mongoQueryBuilder(options, function(data) {
       res.send(data)
     });
-  }
+  }*/
 
 
   /* Start Protected Functions */
@@ -72,8 +72,8 @@ function WoodMoneyHandler(request) {
     MongoClient.connect(dbUri, function(err, db) {
       var Collection = db.collection('woodmoneylive');
 
-      var query = mongoQueryBuilder(options);
-      var results = Collection.find(query);
+      var query = (Object.keys(options).length > 0) ? mongoQueryBuilder(options) : null;
+      var results = (Object.keys(options).length > 0) ? Collection.find(query) : Collection.find();
 
       results.toArray(function(err, docs) {
         if(!err)
