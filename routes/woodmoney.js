@@ -70,7 +70,7 @@ function WoodMoneyHandler(request) {
   var mongoQueryBuilder = function(options, callback) {
     var queryBuilder = "";
     Object.keys(options).forEach(function(key) {
-      if(Number.isInteger)
+      if(Number.isInteger(options[key]))
         queryBuilder += key + ": " + options[key];
       else
         queryBuilder += key + ": '" + options[key] + "'";
