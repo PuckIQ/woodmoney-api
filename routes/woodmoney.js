@@ -72,13 +72,8 @@ function WoodMoneyHandler(request) {
     MongoClient.connect(dbUri, function(err, db) {
       var Collection = db.collection('woodmoneylive');
 
-      var query = (Object.keys(options).length > 0) ? mongoQueryBuilder(options) : null;
-      if(query == null) {
-        var results = Collection.find();
-      } else {
-        console.log(query);
-        var results = Collection.find(options);
-      }
+      var query = mongoQueryBuilder(options);
+      var results = Collection.find(query);
 
       results.toArray(function(err, docs) {
         if(!err)
@@ -91,20 +86,15 @@ function WoodMoneyHandler(request) {
   }
 
   function mongoQueryBuilder(options) {
-    var queryBuilder = "";
-    var counter = 0;
+    var queryBuilder = new Object();
     Object.keys(options).forEach(function(key) {
-      var start = (counter > 0) ? ", " : "{";
-
       if(isNumeric(options[key]))
-        queryBuilder += start + key + ": " + options[key];
+        queryBuilder[key] = parseInt(options[key]);
       else
-        queryBuilder += start + key + ": '" + options[key] + "'";
-
-      counter++;
+        queryBuilder[key] = options[key];
     });
 
-    return queryBuilder + "}";
+    return queryBuilder;
   }
 
   function isNumeric(n) {
