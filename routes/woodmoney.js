@@ -85,7 +85,7 @@ function WoodMoneyHandler(request) {
     });
   }
 
-  var mongoQueryBuilder = function(options, callback) {
+  function mongoQueryBuilder(options) {
     var queryBuilder = "";
     var counter = 0;
     Object.keys(options).forEach(function(key) {
@@ -99,7 +99,7 @@ function WoodMoneyHandler(request) {
       counter++;
     });
 
-    callback(queryBuilder + "}");
+    return queryBuilder + "}";
   }
 
   function isNumeric(n) {
