@@ -77,7 +77,7 @@ function WoodMoneyHandler(request) {
         var results = Collection.find();
       } else {
         console.log(query);
-        var results = Collection.find(query);
+        var results = Collection.find({PlayerId: 8471699});
       }
 
       results.toArray(function(err, docs) {
