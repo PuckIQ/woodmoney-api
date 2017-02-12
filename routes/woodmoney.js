@@ -85,6 +85,8 @@ function WoodMoneyHandler(request) {
     });
   }
 
+
+  /* DO NOT MODIFY BELOW HERE */
   function mongoQueryBuilder(options) {
     var queryBuilder = new Object();
     Object.keys(options).forEach(function(key) {

@@ -9,7 +9,7 @@ module.exports = exports = function(app, request) {
   //app.get('/woodmoney-all', woodMoneyHandler.getWoodMoneyBase);
 
   // Return WoodMoney by Season results
-  app.get('/woodmoney-season/:season', woodMoneyHandler.getWoodMoneyBase);
+  //app.get('/woodmoney-season/:season', woodMoneyHandler.getWoodMoneyBase);
   app.get('/woodmoney-season/:season/comp/:Comp', woodMoneyHandler.getWoodMoneyBase);
   app.get('/woodmoney-season/:season/conf/:Conf', woodMoneyHandler.getWoodMoneyBase);
   app.get('/woodmoney-season/:season/comp/:Comp/conf/:Conf', woodMoneyHandler.getWoodMoneyBase);
