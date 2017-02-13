@@ -19,7 +19,7 @@ Usage for WoodMoney API
 
 /woodmoney-player/[playerid]/conf/[conference]
 
-/woodmoney-player/[playerid]/comp[comptype]/conf/[conference]
+/woodmoney-player/[playerid]/comp/[comptype]/conf/[conference]
 
 /woodmoney-player/[playerid]/season/[seasonid]
 
@@ -37,7 +37,7 @@ Usage for WoodMoney API
 
 /woodmoney-team/[team]/conf/[conference]
 
-/woodmoney-team/[team]/comp[comptype]/conf/[conference]
+/woodmoney-team/[team]/comp/[comptype]/conf/[conference]
 
 /woodmoney-team/[team]/season/[seasonid]
 
