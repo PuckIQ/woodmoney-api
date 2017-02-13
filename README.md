@@ -1,5 +1,5 @@
 # REST API for WoodMoney
-Usage for WoodMoeny API
+Usage for WoodMoney API
 
 ## Usage
 
@@ -32,3 +32,17 @@ Usage for WoodMoeny API
 ### Team Stats
 
 /woodmoney-team/[team]
+
+/woodmoney-team/[team]/comp/[comptype]
+
+/woodmoney-team/[team]/conf/[conference]
+
+/woodmoney-team/[team]/comp[comptype]/conf/[conference]
+
+/woodmoney-team/[team]/season/[seasonid]
+
+/woodmoney-team/[team]/season/[seasonid]/comp/[comptype]
+
+/woodmoney-team/[team]/season/[seasonid]/conf/[conference]
+
+/woodmoney-team/[team]/season/[seasonid]/comp/[comptype]/conf[conference]
