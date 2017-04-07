@@ -7,24 +7,26 @@ function WoodMoneyHandler(request) {
   "use strict";
 
   this.getPlayerList = function(req, res) {
-    var season = req.params.season;
+    var season = parseInt(req.params.season);
+    var gametype;
     switch(req.params.gametype) {
       case '02':
       case '2':
       case 2:
       case 'R':
       case 'REG':
-        var gametype = 2;
+        gametype = 2;
         break;
       default:
-        var gametype = 3;
+        gametype = 3;
         break;
     }
+
     playerList(season, gametype, function(data) {
       res.contentType('application/json');
       res.send(JSON.stringify(data));
     });
-  } /* End of Public Function getPlayerList */
+  }
 
   this.getWoodMoneyBase = function(req, res) {
     var options = req.params;
@@ -34,14 +36,7 @@ function WoodMoneyHandler(request) {
     });
   }
 
-  /* DELETE THIS FOR PRODUCTION
-  this.getQueryBuilder = function(req, res) {
-    var options = req.params;
-    mongoQueryBuilder(options, function(data) {
-      res.send(data)
-    });
-  }*/
-
+  /* End of Public Function getPlayerList */
 
   /* Start Protected Functions */
   var playerList = function(season, gametype, callback) {
@@ -101,6 +96,10 @@ function WoodMoneyHandler(request) {
 
   function isNumeric(n) {
     return !isNaN(n) && isFinite(n);
+  }
+
+  function isFloat(n) {
+    return n%1===0;
   }
 };
 
