@@ -26,7 +26,7 @@ function WoodMoneyHandler(request) {
             res.contentType('application/json');
             res.send(JSON.stringify(data));
         });
-    }
+    };
 
     this.getWoodMoneyBase = function(req, res) {
         var options = req.params;
@@ -34,7 +34,7 @@ function WoodMoneyHandler(request) {
             res.contentType('application/json');
             res.send(JSON.stringify(data));
         });
-    }
+    };
 
     /* End of Public Function getPlayerList */
 
@@ -61,7 +61,7 @@ function WoodMoneyHandler(request) {
 
 
         });
-    } /* End of Private Function playerList */
+    }; /* End of Private Function playerList */
 
     var woodMoneyBase = function(options, callback) {
         MongoClient.connect(dbUri, function(err, db) {
@@ -76,9 +76,9 @@ function WoodMoneyHandler(request) {
                 else
                     callback(null);
                 db.close();
-            })
+            });
         });
-    }
+    };
 
 
     /* DO NOT MODIFY BELOW HERE */
@@ -101,6 +101,6 @@ function WoodMoneyHandler(request) {
     function isFloat(n) {
         return n % 1 === 0;
     }
-};
+}
 
 module.exports = WoodMoneyHandler;
