@@ -94,6 +94,7 @@ function WoodMoneyHandler(request) {
         return queryBuilder;
     }
 
+    /* Helper Functions */
     function isNumeric(n) {
         return !isNaN(n) && isFinite(n);
     }
