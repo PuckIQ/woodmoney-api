@@ -63,6 +63,7 @@ function WoodMoneyHandler(request) {
         });
     }; /* End of Private Function playerList */
 
+    /* This function runs all of the woodmoney requests to the DB */
     var woodMoneyBase = function(options, callback) {
         MongoClient.connect(dbUri, function(err, db) {
             var Collection = db.collection('woodmoneylive');
