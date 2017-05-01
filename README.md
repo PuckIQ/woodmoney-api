@@ -46,3 +46,11 @@ Usage for WoodMoney API
 /woodmoney-team/[team]/season/[seasonid]/conf/[conference]
 
 /woodmoney-team/[team]/season/[seasonid]/comp/[comptype]/conf[conference]
+
+### Competition Stats
+
+/woodmoney-comp/comp/[comptype]
+
+/woodmoney-comp/comp/[comptype]/gametype/[gametype]
+
+/woodmoney-comp/comp/[comptype]/gametype/[gametype]/pos/[position]

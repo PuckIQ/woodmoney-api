@@ -1,7 +1,7 @@
 var config = require('../conf.js');
 var MongoClient = require('mongodb').MongoClient;
 
-var dbUri = 'mongodb://' + config.dbUser + ':' + config.dbPass + '@' + config.dbUri + ':' + config.dbPort + '/' + config.dbName;
+var dbUri = 'mongodb://' + config.dbUser + ':' + config.dbPass + '@' + config.dbUri + ':' + config.dbPort + '/' + config.dbName + '?slaveOk=true';
 
 function WoodMoneyHandler(request) {
     "use strict";
