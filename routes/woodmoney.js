@@ -36,6 +36,22 @@ function WoodMoneyHandler(request) {
         });
     };
 
+    this.getSeasonWoodWowy = function(req, res) {
+        var options = req.params;
+        seasonWoodWowy(options, function(data) {
+            res.contentType('application/json');
+            res.send(JSON.stringify(data));
+        });
+    };
+
+    this.getSeasonWowy = function(req, res) {
+        var options = req.params;
+        seasonWowy(options, function(data) {
+            res.contentType('application/json');
+            res.send(JSON.stringify(data));
+        });
+    };
+
     /* End of Public Function getPlayerList */
 
     /* Start Protected Functions */
@@ -81,9 +97,63 @@ function WoodMoneyHandler(request) {
         });
     };
 
+    var seasonWoodWowy = function(options, callback) {
+        MongoClient.connect(dbUri, function(err, db) {
+            var Collection = db.collection('seasonwoodwowy');
+
+            var query = mongoQueryBuilder(options);
+            var results = Collection.aggregate([
+                { $match: query },
+                { $lookup: { from: "playerinfo", localField: "Player1Id", foreignField: "_id", as: "player1info" } },
+                { $lookup: { from: "playerinfo", localField: "Player2Id", foreignField: "_id", as: "player2info" } }
+            ])
+
+            results.toArray(function(err, docs) {
+                if(!err) {
+                    callback(docs);
+                } else {
+                    callback(null);
+                }
+                db.close();
+            });
+        });
+    };
+
+    var seasonWowy = function(options, callback) {
+        MongoClient.connect(dbUri, function(err, db) {
+            var Collection = db.collection('seasonwowy');
+
+            var query = mongoQueryBuilder(options);
+            var results = Collection.aggregate([
+                { $match: query },
+                { $lookup: { from: "playerinfo", localField: "Player1Id", foreignField: "_id", as: "player1info" } },
+                { $lookup: { from: "playerinfo", localField: "Player2Id", foreignField: "_id", as: "player2info" } }
+            ])
+
+            results.toArray(function(err, docs) {
+                if(!err) {
+                    callback(docs);
+                } else {
+                    callback(null);
+                }
+                db.close();
+            });
+        });
+    };
+
+    var playerInfo = function(playerid, callback) {
+        MongoClient.connect(dbUri, function(err, db) {
+            var Collection = db.collection('playerinfo');
+            Collection.find({'_id': playerid}, function(err, doc) {
+                if(!err)
+                    callback(doc);
+            });
+            db.close();
+        });
+    };
 
     /* DO NOT MODIFY BELOW HERE */
-    function mongoQueryBuilder(options) {
+     function mongoQueryBuilder(options) {
         var queryBuilder = new Object();
         Object.keys(options).forEach(function(key) {
             if (isNumeric(options[key]))

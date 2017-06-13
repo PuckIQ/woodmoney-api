@@ -54,3 +54,35 @@ Usage for WoodMoney API
 /woodmoney-comp/comp/[comptype]/gametype/[gametype]
 
 /woodmoney-comp/comp/[comptype]/gametype/[gametype]/pos/[position]
+
+### WOWY Team Stats
+
+/wowy-team/[team]
+
+/wowy-team/[team]/season/[seasonid]
+
+/wowy-team/[team]/season/[seasonid]/gametype/[gametype]
+
+### WOWY Player Stats
+
+/wowy-player/[playerid]
+
+/wowy-player/[playerid]/season/[seasonid]
+
+/wowy-player/[playerid]/season/[seasonid]/gametype/[gametype]
+
+### WoodWOWY Team Stats
+
+/woodwowy-team/[team]
+
+/woodwowy-team/[team]/season/[seasonid]
+
+/woodwowy-team/[team]/season/[seasonid]/gametype/[gametype]
+
+### WoodWOWY Player Stats
+
+/woodwowy-player/[playerid]
+
+/woodwowy-player/[playerid]/season/[seasonid]
+
+/woodwowy-player/[playerid]/season/[seasonid]/gametype/[gametype]

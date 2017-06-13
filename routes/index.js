@@ -35,6 +35,20 @@ module.exports = exports = function(app, request) {
     app.get('/woodmoney-comp/comp/:Comp', woodMoneyHandler.getWoodMoneyBase);
     app.get('/woodmoney-comp/comp/:Comp/GameType/:gametype', woodMoneyHandler.getWoodMoneyBase);
     app.get('/woodmoney-comp/comp/:Comp/GameType/:gametype/pos/:Pos', woodMoneyHandler.getWoodMoneyBase);
+    
+    app.get('/wowy-team/:Team', woodMoneyHandler.getSeasonWowy);
+    app.get('/wowy-team/:Team/season/:season', woodMoneyHandler.getSeasonWowy);
+    app.get('/wowy-team/:Team/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWowy);
 
-    //app.get('/querytst/:wood/:money/:puckiq/:fun', woodMoneyHandler.getQueryBuilder);
+    app.get('/wowy-player/:Player1Id', woodMoneyHandler.getSeasonWowy);
+    app.get('/wowy-player/:Player1Id/season/:season', woodMoneyHandler.getSeasonWowy);
+    app.get('/wowy-player/:Player1Id/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWowy);
+    
+    app.get('/woodwowy-team/:Team', woodMoneyHandler.getSeasonWoodWowy);
+    app.get('/woodwowy-team/:Team/season/:season', woodMoneyHandler.getSeasonWoodWowy);
+    app.get('/woodwowy-team/:Team/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWoodWowy);
+
+    app.get('/woodwowy-player/:Player1Id', woodMoneyHandler.getSeasonWoodWowy);
+    app.get('/woodwowy-player/:Player1Id/season/:season', woodMoneyHandler.getSeasonWoodWowy);
+    app.get('/woodwowy-player/:Player1Id/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWoodWowy);
 };
