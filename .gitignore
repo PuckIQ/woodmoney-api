@@ -38,3 +38,6 @@ jspm_packages
 
 # Skip Config File
 conf.js
+
+# Skip .vscode
+.vscode

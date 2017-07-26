@@ -40,6 +40,8 @@ module.exports = exports = function(app, request) {
     app.get('/wowy-team/:Team/season/:season', woodMoneyHandler.getSeasonWowy);
     app.get('/wowy-team/:Team/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWowy);
 
+    app.get('/wowy-teamu/:Team', woodMoneyHandler.getSeasonWowyUpdated);
+
     app.get('/wowy-player/:Player1Id', woodMoneyHandler.getSeasonWowy);
     app.get('/wowy-player/:Player1Id/season/:season', woodMoneyHandler.getSeasonWowy);
     app.get('/wowy-player/:Player1Id/season/:season/GameType/:gametype', woodMoneyHandler.getSeasonWowy);
