@@ -13,6 +13,7 @@ module.exports = exports = function(app, request) {
     app.get('/woodmoney-season/:season/comp/:Comp', woodMoneyHandler.getWoodMoneyBase);
     app.get('/woodmoney-season/:season/conf/:Conf', woodMoneyHandler.getWoodMoneyBase);
     app.get('/woodmoney-season/:season/comp/:Comp/conf/:Conf', woodMoneyHandler.getWoodMoneyBase);
+    app.get('/woodmoney-season/:season/comp/:Comp/pos/:Pos', woodMoneyHandler.getWoodMoneyBase);
 
     app.get('/woodmoney-player/:PlayerId', woodMoneyHandler.getWoodMoneyBase);
     app.get('/woodmoney-player/:PlayerId/comp/:Comp', woodMoneyHandler.getWoodMoneyBase);
