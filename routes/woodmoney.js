@@ -6,23 +6,16 @@ var dbUri = 'mongodb://' + config.dbUser + ':' + config.dbPass + '@' + config.db
 function WoodMoneyHandler(request) {
     "use strict";
 
-    this.getPlayerList = function(req, res) {
-        var season = parseInt(req.params.season);
-        var gametype;
-        switch (req.params.gametype) {
-            case '02':
-            case '2':
-            case 2:
-            case 'R':
-            case 'REG':
-                gametype = 2;
-                break;
-            default:
-                gametype = 3;
-                break;
-        }
+    /**
+     * Exposed Functions
+     * All of the functions will be exposed to the outside world and can be triggered
+     * via the index.js.
+     */
 
-        playerList(season, gametype, function(data) {
+    this.getPlayerInfo = function(req, res) {
+        var options = req.params;
+        var quri = req.query;
+        playerInfo(options, quri, function(data) {
             res.contentType('application/json');
             res.send(JSON.stringify(data));
         });
@@ -30,49 +23,43 @@ function WoodMoneyHandler(request) {
 
     this.getWoodMoneyBase = function(req, res) {
         var options = req.params;
-        woodMoneyBase(options, function(data) {
+        var quri = req.query;
+        woodMoneyBase(options, quri, function(data) {
             res.contentType('application/json');
             res.send(JSON.stringify(data));
         });
     };
 
-    this.getSeasonWoodWowy = function(req, res) {
-        var options = req.params;
-        seasonWoodWowy(options, function(data) {
+    this.getSchema = function(req, res) {
+        var collection = req.params;
+        schemaBase(collection.collection, function(data) {
             res.contentType('application/json');
             res.send(JSON.stringify(data));
         });
-    };
+    }
 
-    this.getSeasonWowy = function(req, res) {
-        var options = req.params;
-        seasonWowy(options, function(data) {
-            res.contentType('application/json');
-            res.send(JSON.stringify(data));
-        });
-    };
 
-    this.getSeasonWowyUpdated = function(req, res) {
-        var options = req.params;
-        seasonWowyUpdated(options, function(data) {
-            res.contentType('application/json');
-            res.send(JSON.stringify(data));
-        });
-    };
+    /**
+     * Framework Functions
+     * These are the functions used to build the framework for the exposed functions
+     */
 
-    /* End of Public Function getPlayerList */
+    var playerInfo = function(options, quri, callback) {
+        var playerid = (typeof options.playerid !== 'undefined') ? parseInt(options.playerid) : null;
+        var displayteams = (typeof quri.displayteams !== 'undefined') ? 1 : 0;
+        var results;
 
-    /* Start Protected Functions */
-    var playerList = function(season, gametype, callback) {
         MongoClient.connect(dbUri, function(err, db) {
-            var Collection = db.collection('woodmoneylive');
-
-            var results = Collection.aggregate([
-                { '$match': { 'Player': { '$exists': true }, 'season': season, 'gametype': gametype } },
-                { '$project': { 'PlayerId': 1, 'Player': 1, 'Team': 1, '_id': 0 } },
-                { '$sort': { 'PlayerId': 1 } },
-                { '$group': { '_id': '$PlayerId', 'PlayerName': { '$first': '$Player' }, 'Team': { '$first': '$Team' } } }
-            ], { cursor: { 'batchSize': 1 } });
+            var Collection = db.collection('playerinfo');
+            if(playerid == null && displayteams == 1) {
+                results = Collection.find();
+            } else if(playerid != null && displayteams == 1) {
+                results = Collection.find({'_id': playerid});
+            } else if(playerid == null && displayteams == 0) {
+                results = Collection.find({},{'teams': 0});
+            } else {
+                results = Collection.find({'_id': playerid},{'teams': 0});
+            }
 
             results.toArray(function(err, docs) {
                 if (!err) {
@@ -82,18 +69,16 @@ function WoodMoneyHandler(request) {
                 }
                 db.close();
             });
-
-
         });
-    }; /* End of Private Function playerList */
+    }
 
-    /* This function runs all of the woodmoney requests to the DB */
-    var woodMoneyBase = function(options, callback) {
+    var woodMoneyBase = function(options, quri, callback) {
         MongoClient.connect(dbUri, function(err, db) {
             var Collection = db.collection('woodmoneylive');
 
-            var query = mongoQueryBuilder(options);
-            var results = Collection.find(query);
+            var query = mongoQueryBuilder(options, quri);
+            var rt = mongoReturnBuilder(quri);
+            var results = (rt != null) ? Collection.find(query,rt) : Collection.find(query);
 
             results.toArray(function(err, docs) {
                 if (!err)
@@ -105,148 +90,38 @@ function WoodMoneyHandler(request) {
         });
     };
 
-    var seasonWoodWowy = function(options, callback) {
+    var schemaBase = function(col, callback) {
         MongoClient.connect(dbUri, function(err, db) {
-            var Collection = db.collection('seasonwoodwowy');
+            var Collection = db.collection(col);
+            // find is used instead of findOne to go deeper into the DB
+            // to get a document with all schema info
+            var results = Collection.find().skip(10).limit(1);
 
-            var query = mongoQueryBuilder(options);
-            var results = Collection.aggregate([
-                { $match: query },
-                { $lookup: { from: "playerinfo", localField: "Player1Id", foreignField: "_id", as: "player1info" } },
-                { $lookup: { from: "playerinfo", localField: "Player2Id", foreignField: "_id", as: "player2info" } }
-            ])
-
-            results.toArray(function(err, docs) {
-                if(!err) {
-                    callback(docs);
-                } else {
-                    callback(null);
+            results.toArray(function(err, item) {
+                console.log(item[0]);
+                var schema = new Array();
+                for(var key in item[0]) {
+                    schema.push(key);
                 }
+                callback(schema);
                 db.close();
             });
         });
-    };
-
-    var seasonWowy = function(options, callback) {
-        MongoClient.connect(dbUri, function(err, db) {
-            var Collection = db.collection('seasonwowy');
-
-            var query = mongoQueryBuilder(options);
-            var results = Collection.aggregate([
-                { $match: query },
-                { $lookup: { from: "playerinfo", localField: "Player1Id", foreignField: "_id", as: "player1info" } },
-                { $lookup: { from: "playerinfo", localField: "Player2Id", foreignField: "_id", as: "player2info" } }
-            ])
-
-            results.toArray(function(err, docs) {
-                if(!err) {
-                    callback(docs);
-                } else {
-                    callback(null);
-                }
-                db.close();
-            });
-        });
-    };
-
-    var seasonWowyUpdated = function(options, callback) {
-        MongoClient.connect(dbUri, function(err, db) {
-            var Collection = db.collection('seasonwowy');
-
-            var query = mongoQueryBuilder(options);
-            var results = Collection.aggregate([
-                { $match: query },
-                { $project: { 'Player1Id': 1, 'Player2Id': 1, 'Team': 1, '_id': 0, 'wowy': {
-                    '_id': '$_id',
-                    'SACF': '$SACF',
-                    'SACA': '$SACA',
-                    'DFA/60': '$DFA/60',
-                    'SACA/60': '$SACA/60',
-                    'Player2Id': '$Player2Id',
-                    'CF%': '$CF%',
-                    'gametype': '$gametype',
-                    'FA': '$FA',
-                    'FF': '$FF',
-                    'FF/60': '$FF/60',
-                    'FF%': '$FF%',
-                    'SF%': '$SF%',
-                    'SA/60': '$SA/60',
-                    'GF%': '$GF%',
-                    'RecordType': '$RecordType',
-                    'FA/60': '$FA/60',
-                    'SF/60': '$SF/60',
-                    'WOWYType': '$WOWYType',
-                    'SACF/60': '$SACF/60',
-                    'season': '$season',
-                    'CA': '$CA',
-                    'CA/60': '$CA/60',
-                    'CF': '$CF',
-                    'GF': '$GF',
-                    'GA': '$GA',
-                    'Team': '$Team',
-                    'GA/60': '$GA/60',
-                    'DFF': '$DFF',
-                    'DFA': '$DFA',
-                    'EVTOI': '$EVTOI',
-                    'CF/60': '$CF/60',
-                    'GF/60': '$GF/60',
-                    'Player1Id': '$Player1Id',
-                    'SACF%': '$SACF%',
-                    'DFF%': '$DFF%',
-                    'SA': '$SA',
-                    'SF': '$SF',
-                    'DFF/60': '$DFF/60'
-                } } },
-                { $sort: { 'Player1Id': 1, 'Player2Id': 1 } },
-                { $lookup: { from: "playerinfo", localField: "Player1Id", foreignField: "_id", as: "player1info" } },
-                { $lookup: { from: "playerinfo", localField: "Player2Id", foreignField: "_id", as: "player2info" } }
-            ]);
-
-            var wowy = new Array();
-            results.toArray(function(err, docs) {
-                if(!err) {
-                    var playerWowy = new Object();
-                    var wowyArr = new Array();
-                    for(var i = 0; i <= docs.length; i++) {
-                        if(typeof docs[i] !== 'undefined') {
-                            if(i > 0 && docs[i].Player2Id != docs[i-1].Player2Id) {
-                                playerWowy['wowy'] = wowyArr;
-                                wowy.push(playerWowy);
-                                playerWowy = {};
-                                wowyArr = [];
-                            }
-
-                            playerWowy['Player1Id'] = docs[i].Player1Id;
-                            playerWowy['Player2Id'] = docs[i].Player2Id;
-                            playerWowy['Player1Info'] = docs[i].player1info;
-                            playerWowy['Player2Info'] = docs[i].player2info;
-                            playerWowy['Team'] = docs[i].Team;
-                            wowyArr.push(docs[i].wowy);
-                        } else {
-                            playerWowy['wowy'] = wowyArr;
-                            wowy.push(playerWowy);
-                        }
-                        //wowy.push(playerWowy);
-                    }
-                    //console.log(wowy);
-                    callback(wowy);
-                }
-            })
-        })
     }
-    var playerInfo = function(playerid, callback) {
-        MongoClient.connect(dbUri, function(err, db) {
-            var Collection = db.collection('playerinfo');
-            Collection.find({'_id': playerid}, function(err, doc) {
-                if(!err)
-                    callback(doc);
-            });
-            db.close();
-        });
-    };
 
-    /* DO NOT MODIFY BELOW HERE */
-     function mongoQueryBuilder(options) {
+    /**
+     * Misc Functions
+     * These are used as building blocks and are to be access by the Framework Functions
+     * only.
+     */
+
+    /**
+     * Name: mongoQueryBuilder
+     * Usage: mongoQueryBuilder(object)
+     * Returns: object
+     * Description: Used to define a mongodb query (ie. db.collection.find(mongoQueryBuilder(object)) )
+     */
+    function mongoQueryBuilder(options, quri) {
         var queryBuilder = new Object();
         Object.keys(options).forEach(function(key) {
             if (isNumeric(options[key]))
@@ -255,10 +130,38 @@ function WoodMoneyHandler(request) {
                 queryBuilder[key] = options[key];
         });
 
+        Object.keys(quri).forEach(function(key) {
+            if(key != 'rq' && typeof queryBuilder[key] === 'undefined') {
+                if (isNumeric(quri[key]))
+                    queryBuilder[key] = parseInt(quri[key]);
+                else {
+                    queryBuilder[key] = quri[key];
+                }
+            }
+        });
+
         return queryBuilder;
     }
 
-    /* Helper Functions */
+    /**
+     * Name: mongoReturnBuilder
+     * Usage: mongoReturnBuilder(object)
+     * Returns: object,null
+     */
+    function mongoReturnBuilder(options) {
+        if(typeof options.rq !== 'undefined') {
+            var returnBuilder = new Object();
+            var requestArray = options.rq.split(',');
+            returnBuilder['_id'] = (requestArray.indexOf("id") >= 0 ) ? 1 : 0;
+            for(var x = 0; x < requestArray.length; x++) {
+                returnBuilder[requestArray[x]] = 1;
+            }
+            return returnBuilder;
+        } else {
+            return null;
+        }
+    }
+
     function isNumeric(n) {
         return !isNaN(n) && isFinite(n);
     }
@@ -266,6 +169,6 @@ function WoodMoneyHandler(request) {
     function isFloat(n) {
         return n % 1 === 0;
     }
-}
+};
 
 module.exports = WoodMoneyHandler;
