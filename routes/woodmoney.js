@@ -234,6 +234,7 @@ function WoodMoneyHandler(request) {
             })
         })
     }
+
     var playerInfo = function(playerid, callback) {
         MongoClient.connect(dbUri, function(err, db) {
             var Collection = db.collection('playerinfo');
